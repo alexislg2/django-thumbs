@@ -6,7 +6,11 @@ https://github.com/madmw/django-thumbs
 A fork of django-thumbs [http://code.google.com/p/django-thumbs/] by Antonio Melé [http://django.es].
 
 """
-import cStringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
+#import cStringIO
 from django.db.models import ImageField
 from django.db.models.fields.files import ImageFieldFile
 from django.core.files.base import ContentFile
@@ -39,7 +43,7 @@ def generate_thumb(original, size, preserve_ratio, format='JPEG'):
         image.thumbnail(size, Image.ANTIALIAS)
     else:
         image = ImageOps.fit(image, size, Image.ANTIALIAS)
-    io = cStringIO.StringIO()
+    io = StringIO()
     if format.upper() == 'JPG':
         format = 'JPEG'
     image.save(io, format)
